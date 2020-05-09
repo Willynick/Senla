@@ -1,8 +1,7 @@
 package task3;
-import java.util.Arrays;
+import task3.sentence.Sentence;
+
 import java.util.Scanner;
-import java.lang.Character;
-import java.util.regex.Pattern;
 
 public class Main {
 
@@ -10,16 +9,14 @@ public class Main {
 
         System.out.print("Enter the sentence: ");
         Scanner in = new Scanner(System.in);
-        String tmpSentence = in.nextLine();
+        String enteredSentence = in.nextLine();
 
-        Sentence sentence = new Sentence();
+        Sentence sentence = new Sentence(enteredSentence);
 
-        sentence.Parse(tmpSentence);
-        sentence.SortWords();
-        sentence.ConvertionTheFirstLetterOfSentenceToUppercase();
-        sentence.SetPunctuationMarksInNormalOrder();
+        sentence.sort();
+        sentence.setFirstLettersWordsToUppercase();
 
-        System.out.println("Sentence count: " + sentence.Lenght());
+        System.out.println("Number of words in the sentence: " + sentence.calculateNumberOfWords());
         System.out.println("New sentence: ");
         System.out.print(sentence.toString());
 

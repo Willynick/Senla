@@ -1,21 +1,20 @@
 package task4;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
     private static int GetCountWord(String text, String word){
         int count = 0;
 
-        int index = text.indexOf(word);
-        while (index != -1)
-        {
+        Pattern pattern = Pattern.compile(word);
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
             count++;
-            index = text.indexOf(word, index + 1);
-            if (index != -1 && (index + word.length() - 1) != text.length()-1 && index !=0 &&
-                    (Character.isLetter(text.charAt(index+1))  || Character.isLetter(text.charAt(index-1)) )){
-                count--;
-            }
         }
+
         return count;
     }
 

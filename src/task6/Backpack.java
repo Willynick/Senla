@@ -1,95 +1,115 @@
 package task6;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-
 public class Backpack {
-    private ArrayList<Things> things = new ArrayList<Things>();
-    private ArrayList<Things> bestBacpack;
-    private int maxWeight;
-    private double maxPrice;
 
-    public Backpack (int weight)
-    {
-        maxWeight = weight;
+    private List<Thing> bestThings = null;
+    private List<Thing> things = new ArrayList<>();
+
+    private double maxWeight;
+
+    private double bestPrice;
+
+    public Backpack() {
+
     }
 
-    private double TotalWeight(ArrayList<Things> things)
+    public Backpack(double maxWeight) {
+
+        this.maxWeight = maxWeight;
+    }
+
+    public List<Thing> getBestThings() {
+        return bestThings;
+    }
+
+    public void setBestThings(List<Thing> bestThings) {
+        this.bestThings = bestThings;
+    }
+
+    public double getMaxWeight() {
+        return maxWeight;
+    }
+
+    public void setMaxWeight(double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    public double getBestPrice() {
+        return bestPrice;
+    }
+
+    public void setBestPrice(double bestPrice) {
+        this.bestPrice = bestPrice;
+    }
+
+    public void addNewThing(Thing newThing) {
+        things.add(newThing);
+    }
+
+    public double calculateWeight(List<Thing> things)
     {
-        double weight = 0;
-        for (int i = 0; i < things.size(); i++)
+        double sumWeight = 0;
+
+        for(Thing i : things)
         {
-            weight += things.get(i).weight;
+            sumWeight += i.getWeight();
         }
-        return weight;
+
+        return sumWeight;
     }
 
-    private double TotalPrice(ArrayList<Things> things)
+    public double calculatePrice(List<Thing> things)
     {
-        double price = 0;
-        for (int i = 0; i < things.size(); i++)
+        double sumPrice = 0;
+
+        for(Thing i : things)
         {
-            price += things.get(i).price;
+            sumPrice += i.getPrice();
         }
-        return price;
+
+        return sumPrice;
     }
 
-    public void AddNewThing()
+    private void checkSetThings(List<Thing> things)
     {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the name: "); String name = scanner.nextLine();
-        System.out.println("Enter the price: "); double price = scanner.nextDouble();
-        System.out.println("Enter the weight: "); double weight = scanner.nextDouble();
-        things.add(new Things(name, price, weight));
-    }
-
-    public void BestBackpacks()
-    {
-        if(things.isEmpty())
+        if (bestThings == null)
         {
-            System.out.println("The backpack is empty." );
-        }
-        else
-        {
-            System.out.print("The backpack with the highest value and not exceeding a certain weight includes: " );
-            SearchAllBackpacks(things);
-            for (var item: bestBacpack)
+            if (calculateWeight(things) <= maxWeight)
             {
-                System.out.print(item.name + " ");
+                bestThings = things;
+                bestPrice = calculatePrice(things);
+            }
+        }
+        else {
+            if (calculateWeight(things) <= maxWeight && calculatePrice(things) > bestPrice) {
+                bestThings = things;
+                bestPrice = calculatePrice(things);
             }
         }
     }
 
-    private void SearchAllBackpacks(ArrayList<Things> things)
+    public void makeAllSets(List<Thing> things)
     {
-        if(!things.isEmpty())
-        {
-            if(bestBacpack == null)
-            {
-                if(TotalWeight(things) <= maxWeight)
-                {
-                    bestBacpack= things;
-                    maxPrice = TotalPrice(things);
-                }
-            }
-            else
-            {
-                if(TotalWeight(things) <= maxWeight && maxPrice < TotalPrice(things))
-                {
-                    bestBacpack = things;
-                    maxPrice = TotalPrice(things);
-                }
-            }
-        }
+        if (things.size() > 0)
+            checkSetThings(things);
 
-        for(int i = 0; i < things.size(); i++)
+        for (int i = 0; i < things.size() ; i++)
         {
-            ArrayList<Things> nextBackpack = new ArrayList<Things>(things);
-            nextBackpack .remove(i);
-            SearchAllBackpacks(nextBackpack );
+            List<Thing> newSet = new ArrayList<Thing>(things);
+
+            newSet.remove(i);
+
+            makeAllSets(newSet);
         }
+    }
+
+    public List<Thing> getBestBackpacks() {
+        makeAllSets(things);
+
+        return bestThings;
     }
 }
