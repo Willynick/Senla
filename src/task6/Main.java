@@ -40,12 +40,12 @@ public class Main {
             {
 
                 menu = scanner.nextInt();
-                if(menu < 1 && menu > 3) {
+                if(menu < 1 || menu > 3) {
                     System.out.println("Incorrect input, enter again");
                 }
 
             }
-            while (menu < 1 && menu > 3);
+            while (menu < 1 || menu > 3);
 
             if (menu == 1) {
                 backpack.addNewThing(BackpackUtility.readNewThing());
